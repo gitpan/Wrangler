@@ -39,12 +39,12 @@ So, please hop over to _cpan_ for the canonical [documentation](http://search.cp
 ## SCREENSHOTS
 
 <div>
-<a href="https://raw.github.com/clipland/wrangler/master/sources/screenshot1.png"><span><img src="https://raw.github.com/clipland/wrangler/master/sources/screenshot1.png" width="400" height="300" alt="Screenshot 1" style="border: 1px solid #888;" /></span></a>
-<a href="https://raw.github.com/clipland/wrangler/master/sources/screenshot2.png"><span><img src="https://raw.github.com/clipland/wrangler/master/sources/screenshot2.png" width="400" height="300" alt="Screenshot 1" style="border: 1px solid #888;" /></span></a>
+<a href="https://raw.github.com/clipland/wrangler/master/screenshot1.png"><span><img src="https://raw.github.com/clipland/wrangler/master/screenshot1_small.png" width="400" height="300" alt="Screenshot 1" style="border: 1px solid #888;" /></span></a>
+<a href="https://raw.github.com/clipland/wrangler/master/screenshot2.png"><span><img src="https://raw.github.com/clipland/wrangler/master/screenshot2_small.png" width="400" height="300" alt="Screenshot 1" style="border: 1px solid #888;" /></span></a>
 </div>
 
-![Screenshot 1](https://raw.github.com/clipland/wrangler/master/sources/screenshot1.png)
-![Screenshot 2](https://raw.github.com/clipland/wrangler/master/sources/screenshot2.png)
+![Screenshot 1](https://raw.github.com/clipland/wrangler/master/screenshot1.png)
+![Screenshot 2](https://raw.github.com/clipland/wrangler/master/screenshot2.png)
 
 ## INSTALLATION
 

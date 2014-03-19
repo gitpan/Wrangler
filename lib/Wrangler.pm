@@ -9,7 +9,7 @@ use Wrangler::PluginManager;
 use Wrangler::FileSystem::Layers;
 use Wrangler::Wx::App;
 
-our $VERSION = '2.11.1';
+our $VERSION = '2.11.2';
 our $log = 0;
 our $wishlist;
 
@@ -162,14 +162,14 @@ end up using Wrangler for everyday file browsing, that's okay with us.
 =begin HTML
 
 <div>
-<a href="https://raw.github.com/clipland/wrangler/master/sources/screenshot1.png"><span><img src="https://raw.github.com/clipland/wrangler/master/sources/screenshot1_small.png" width="400" height="300" alt="Screenshot 1" style="border: 1px solid #888;" /></span></a>
-<a href="https://raw.github.com/clipland/wrangler/master/sources/screenshot2.png"><span><img src="https://raw.github.com/clipland/wrangler/master/sources/screenshot2_small.png" width="400" height="300" alt="Screenshot 1" style="border: 1px solid #888;" /></span></a>
+<a href="https://raw.github.com/clipland/wrangler/master/screenshot1.png"><span><img src="https://raw.github.com/clipland/wrangler/master/screenshot1_small.png" width="400" height="300" alt="Screenshot 1" style="border: 1px solid #888;" /></span></a>
+<a href="https://raw.github.com/clipland/wrangler/master/screenshot2.png"><span><img src="https://raw.github.com/clipland/wrangler/master/screenshot2_small.png" width="400" height="300" alt="Screenshot 1" style="border: 1px solid #888;" /></span></a>
 </div>
 
 =end HTML
 
-L<Screenshot 1|https://raw.github.com/clipland/wrangler/master/sources/screenshot1.png>
-L<Screenshot 2|https://raw.github.com/clipland/wrangler/master/sources/screenshot2.png>
+L<Screenshot 1|https://raw.github.com/clipland/wrangler/master/screenshot1.png>
+L<Screenshot 2|https://raw.github.com/clipland/wrangler/master/screenshot2.png>
 
 =head1 UNIQUE FEATURES
 
