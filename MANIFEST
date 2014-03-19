@@ -19,7 +19,9 @@ lib/Wrangler/Plugin/ColourLabels.pm
 lib/Wrangler/Wx/App.pm
 lib/Wrangler/Wx/Dialog/About.pm
 lib/Wrangler/Wx/Dialog/MultiRename.pm
+lib/Wrangler/Wx/Dialog/Properties.pm
 lib/Wrangler/Wx/Dialog/Settings.pm
+lib/Wrangler/Wx/Dialog/ShortcutCollector.pm
 lib/Wrangler/Wx/FileBrowser.pm
 lib/Wrangler/Wx/FileBrowserTreeList.pm
 lib/Wrangler/Wx/FormEditor.pm

@@ -9,7 +9,7 @@ use Wrangler::PluginManager;
 use Wrangler::FileSystem::Layers;
 use Wrangler::Wx::App;
 
-our $VERSION = 2.11;
+our $VERSION = '2.11.1';
 our $log = 0;
 our $wishlist;
 
