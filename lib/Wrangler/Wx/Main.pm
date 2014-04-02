@@ -159,6 +159,7 @@ sub new {
 			);
 
 				$self->{widgets}->{formeditor} = 'splitter4';
+			#-	$self->{widgets}->{treeeditor} = 'splitter4';
 
 			#	$self->{splitter4}->SplitHorizontally(
 			#		$self->{previewer},
@@ -167,6 +168,7 @@ sub new {
 			#	);
 				$self->{splitter4}->Initialize($self->{previewer});
 				$self->OnReCreateFormEditor();
+			#-	$self->OnReCreateTreeEditor();
 
 	Wrangler::PubSub::thaw(); ## <<
 
@@ -176,8 +178,8 @@ sub new {
 
 	## register our event listeners
 	Wrangler::PubSub::subscribe('dir.activated', sub {
-		Wrangler::debug("Main: OnDirActivated: @_");
 		return unless $_[0];
+		Wrangler::debug("Main: OnDirActivated: @_");
 		$self->SetTitle($_[0]);
 		$parent->{current_dir} = $_[0]; # keep track of a "current directory scope" globally, used by available_properties() calls
 		$0 = 'wrangler '.$_[0]; # set program_name, for ps
@@ -275,6 +277,25 @@ sub OnReCreateFormEditor {
 	unless($self->{ $self->{widgets}->{formeditor} }->IsSplit() ){
 		my $window1 = $self->{ $self->{widgets}->{formeditor} }->GetWindow1();
 		$self->{ $self->{widgets}->{formeditor} }->SplitHorizontally($window1,$self->{formeditor},300);
+	}
+}
+
+sub OnReCreateTreeEditor {
+	my $self = shift;
+	my $force = shift; # force toggle into associating a TreeEditor
+
+	if( $self->{treeeditor} ){
+		$self->{ $self->{widgets}->{treeeditor} }->Unsplit($self->{treeeditor});
+		$self->{treeeditor}->Destroy();
+		delete($self->{treeeditor});
+	}
+
+	require Wrangler::Wx::TreeEditor;
+	$self->{treeeditor} = Wrangler::Wx::TreeEditor->new($self->{ $self->{widgets}->{treeeditor} });
+
+	unless($self->{ $self->{widgets}->{treeeditor} }->IsSplit() ){
+		my $window1 = $self->{ $self->{widgets}->{treeeditor} }->GetWindow1();
+		$self->{ $self->{widgets}->{treeeditor} }->SplitHorizontally($window1,$self->{treeeditor},300);
 	}
 }
 

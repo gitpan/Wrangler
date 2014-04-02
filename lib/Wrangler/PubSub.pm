@@ -17,7 +17,7 @@ events ('publish' what's going on) and then, in other modules, we decide which e
 are interesting for this module, and can select the events we want to listen to
 (subscribe)."
 
-In cases where evens are emited from the new() method of modules - as the case in
+In cases where events are emited from the new() method of modules - as the case in
 FileBrowser for example - we have a hen and egg problem (race-condition). An event
 is submitted while another module, which relies on this event, for example, to initialise
 itself, is not yet "there". For these situations, we have the freeze/thaw mechnism.

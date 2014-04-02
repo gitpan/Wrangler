@@ -70,7 +70,7 @@ WriteMakefile(
 	],
 	META_MERGE	=> {	# CPAN::Meta::Spec
 		resources	=> {
-			repository => 'git://github.com/clipland/wrangler.git',
+			repository => 'https://github.com/clipland/wrangler',
 		},
 		prereqs	=> {
 			test => {
@@ -132,7 +132,7 @@ sub may_send_version_information {
 
 	my %values = (
 			'dist'    => 'Wrangler',
-			'version' => '2.x',
+			'version' => '2.12',
 			'osname'  => $Config::Config{osname},
 			'archname'=> $Config::Config{archname},
 			'osver'   => $^O,

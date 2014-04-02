@@ -56,12 +56,12 @@ our %default_settings = (
 		'text/*'	=> '/usr/bin/gedit',
 	},
 	'valueshortcuts'			=> {
-		49	=> {
+		'1-49'	=> {
 			name	=> "ALT+1",
 			key	=> "Extended Attributes::orientation",
 			value	=> "Rotate 270 CW",
 		},
-		50	=> {
+		'1-50'	=> {
 			name	=> "ALT+2",
 			key	=> "Extended Attributes::orientation",
 			value	=> "Rotate 90 CW",

@@ -59,8 +59,8 @@
    "release_status" : "stable",
    "resources" : {
       "repository" : {
-         "url" : "git://github.com/clipland/wrangler.git"
+         "url" : "https://github.com/clipland/wrangler"
       }
    },
-   "version" : "v2.11.2"
+   "version" : "2.12"
 }

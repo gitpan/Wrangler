@@ -1,5 +1,20 @@
 Revision history for Wrangler
 
+2.12	2014-04-02
+	- FileBrowser: Paste operations now handle utf8
+	  paths, and give UI feedback on error
+	- FileBrowser reclaims keyboard-focus on Populate
+	- FileBrowser: very basic UI feedback on copy/move
+	  file operations
+	- Linux: move() now uses system 'mv' command
+	- Previewer: constructs no_preview bitmap internally
+	- changed CLI parsing, Wrangler now opens a
+	  supplied path instead of always opening with cwd
+	- Default config now has working shortcuts set so
+	  the example "value-shortcuts" work
+	- Enter license key via GUI
+	- ListingToText is back
+
 2.11	2014-03-19 (first public release)
 	- CustomizableEditor is back, on the 2.x branch
 	  as FormEditor, with many improvements, switchable

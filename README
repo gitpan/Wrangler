@@ -24,8 +24,8 @@ the Previewer. It reads preview-thumbnails embedded into JPEGs and takes the lag
 out of browsing large image file collections - without maintaining an additional
 database.
 
-Wrangler is not meant as a replacement for your primary file manager. L<SEE ALSO>
-lists a number of very capable file managers. Wrangler is primarily a metadata handling
+Wrangler is not meant as a replacement for your primary file manager.
+Wrangler is primarily a metadata handling
 application, while it also offers the interface and most functionalities commonly
 found in file-managers for navigating filesystems and selecting files. But if you
 end up using Wrangler for everyday file browsing, that's okay with us.
@@ -34,7 +34,10 @@ _Please note:_
 
 This here is only a short github placeholder README. More information about
 how to install and use Wrangler can be found in the POD embedded in the source code.
-So, please hop over to _cpan_ for the canonical [documentation](http://search.cpan.org/perldoc?Wrangler).
+So, please hop over to:
+
+- [Wrangler's Documentation](http://search.cpan.org/perldoc?Wrangler).
+- [Wrangler's Official Homepage](http://www.clipland.com/wrangler)
 
 ## SCREENSHOTS
 
@@ -42,9 +45,6 @@ So, please hop over to _cpan_ for the canonical [documentation](http://search.cp
 <a href="https://raw.github.com/clipland/wrangler/master/screenshot1.png"><span><img src="https://raw.github.com/clipland/wrangler/master/screenshot1_small.png" width="400" height="300" alt="Screenshot 1" style="border: 1px solid #888;" /></span></a>
 <a href="https://raw.github.com/clipland/wrangler/master/screenshot2.png"><span><img src="https://raw.github.com/clipland/wrangler/master/screenshot2_small.png" width="400" height="300" alt="Screenshot 1" style="border: 1px solid #888;" /></span></a>
 </div>
-
-![Screenshot 1](https://raw.github.com/clipland/wrangler/master/screenshot1.png)
-![Screenshot 2](https://raw.github.com/clipland/wrangler/master/screenshot2.png)
 
 ## INSTALLATION
 
@@ -80,7 +80,7 @@ Copyright 2009-2014 Clipland GmbH. All rights reserved.
 
 ## LICENSE
 
-Wrangler is dual-licensed under the I<Wrangler Non-Commercial License> for private,
+Wrangler is dual-licensed under the _Wrangler Non-Commercial License_ for private,
 non-commercial use, free-of-charge; and under a purchasable license for commercial,
 institutional and educational use. Please contact Clipland at http://www.clipland.com/wrangler
 to buy commercial licenses.

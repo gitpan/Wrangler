@@ -116,6 +116,7 @@ sub new {
 
 	$self->SetSizer($sizer);
 
+	## hook up events
 	Wrangler::PubSub::subscribe('selection.changed', sub {
 		if($_[0] && $_[0] > 1){
 		#	Wrangler::debug("FormEditor: $_[0] files selected: event ignored.");
@@ -125,6 +126,7 @@ sub new {
 		$self->Populate(@_);
 	}, __PACKAGE__);
 
+	## hook up events
 	EVT_COMBOBOX($self, $self->{editor_selector}, sub { $self->SelectEditor($_[0]->{editor_selector}->GetValue()); });
 	EVT_TEXT_ENTER($self, $self->{editor_selector}, sub { $self->Rename($_[0]->{editor_selector}->GetValue()); });
 	EVT_CHAR($label, \&OnChar );
@@ -230,53 +232,6 @@ sub OnSave {
 
 sub OnDeselected {
 	shift->Poll();
-}
-
-sub OnChar {
-	my( $editor, $event ) = @_;
-	# OnChar usually happens in TextCtrls
-	my $element;
-	unless($editor->isa('Wrangler::Wx::FormEditor')){
-		$element = $editor;
-		$editor = $element->GetParent();
-	}
-
-	my $mod  = $event->GetModifiers || 0;
-	my $keycode = $event->GetKeyCode();
-
-	# Wrangler::debug('FormEditor::OnChar: mod:'.$mod .', code:'. $keycode);
-
-	if($keycode == WXK_UP){
-		Wrangler::debug('FormEditor::OnChar: Arrow Up');
-
-		# emit appropriate event
-		Wrangler::PubSub::publish('filebrowser.selection_move.up',$event);
-#		$editor->SetFocus();
-	}elsif($keycode == WXK_DOWN){
-		Wrangler::debug('FormEditor::OnChar: Arrow Down');
-
-		# emit appropriate event
-		Wrangler::PubSub::publish('filebrowser.selection_move.down',$event);
-#		$editor->SetFocus();
-	}else{
-		if($editor->{valueshortcuts}){
-			if(my $shortcut = $editor->{valueshortcuts}->{$mod.'-'.$keycode}){
-				Wrangler::debug("FormEditor::OnChar: ValueShortcut for $shortcut->{name}");
-				if( $editor->{ctrl_lookup}->{ $shortcut->{key} } ){
-					Wrangler::debug(" inser into $shortcut->{key}");
-					$editor->{ctrl_lookup}->{ $shortcut->{key} }->ChangeValue( $shortcut->{value} );
-					$editor->{ctrl_lookup}->{ $shortcut->{key} }->MarkDirty();
-				}else{
-					if($element && ref($element) =~ /::TextCtrl/){
-						Wrangler::debug(" inser into current element $element");
-						$element->ChangeValue( $shortcut->{value} );
-						$element->MarkDirty();
-					}
-				}
-			}
-		}
-	}
-	$event->Skip(1);
 }
 
 sub get_field {
@@ -453,6 +408,53 @@ sub LoadFieldLayout {
 	$editor->{wrangler}->config()->{'ui.formeditor.selected'} = $last;
 
 	Wrangler::PubSub::publish('main.formeditor.recreate');
+}
+
+sub OnChar {
+	my( $editor, $event ) = @_;
+	# OnChar usually happens in TextCtrls
+	my $element;
+	unless($editor->isa('Wrangler::Wx::FormEditor')){
+		$element = $editor;
+		$editor = $element->GetParent();
+	}
+
+	my $mod  = $event->GetModifiers || 0;
+	my $keycode = $event->GetKeyCode();
+
+	# Wrangler::debug('FormEditor::OnChar: mod:'.$mod .', code:'. $keycode);
+
+	if($keycode == WXK_UP){
+		Wrangler::debug('FormEditor::OnChar: Arrow Up');
+
+		# emit appropriate event
+		Wrangler::PubSub::publish('filebrowser.selection_move.up',$event);
+#		$editor->SetFocus();
+	}elsif($keycode == WXK_DOWN){
+		Wrangler::debug('FormEditor::OnChar: Arrow Down');
+
+		# emit appropriate event
+		Wrangler::PubSub::publish('filebrowser.selection_move.down',$event);
+#		$editor->SetFocus();
+	}else{
+		if($editor->{valueshortcuts}){
+			if(my $shortcut = $editor->{valueshortcuts}->{$mod.'-'.$keycode}){
+				Wrangler::debug("FormEditor::OnChar: ValueShortcut for $shortcut->{name}");
+				if( $editor->{ctrl_lookup}->{ $shortcut->{key} } ){
+					Wrangler::debug(" inser into $shortcut->{key}");
+					$editor->{ctrl_lookup}->{ $shortcut->{key} }->ChangeValue( $shortcut->{value} );
+					$editor->{ctrl_lookup}->{ $shortcut->{key} }->MarkDirty();
+				}else{
+					if($element && ref($element) =~ /::TextCtrl/){
+						Wrangler::debug(" inser into current element $element");
+						$element->ChangeValue( $shortcut->{value} );
+						$element->MarkDirty();
+					}
+				}
+			}
+		}
+	}
+	$event->Skip(1);
 }
 
 sub OnRightClick {

@@ -95,7 +95,10 @@ sub UpdateBreadcrumbs {
 	my $button = Wx::Button->new($navbar, -1, $crumbs[0]->{label}, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT | wxNO_BORDER );
 	$navbar->{sizer}->Add( $button, 0, wxRIGHT, 5);
 	$navbar->{paths}->{ $button->GetId() } = $crumbs[0]->{path};
-	EVT_BUTTON($navbar, $button, sub { Wrangler::debug("Navbar: path-button: ". $_[1]->GetId .': '. $navbar->{paths}->{ $_[1]->GetId }); Wrangler::PubSub::publish('dir.activated', $navbar->{paths}->{ $_[1]->GetId }); });
+	EVT_BUTTON($navbar, $button, sub {
+		Wrangler::debug("Navbar: path-button: ". $_[1]->GetId .': '. $navbar->{paths}->{ $_[1]->GetId });
+		Wrangler::PubSub::publish('dir.activated', $navbar->{paths}->{ $_[1]->GetId });
+	});
 
 	## all other
 	for(1 .. $#crumbs){
@@ -105,7 +108,10 @@ sub UpdateBreadcrumbs {
 		my $button = Wx::Button->new($navbar, -1, $crumbs[$_]->{label}, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT | wxNO_BORDER );
 		$navbar->{sizer}->Add( $button, 0, wxLEFT|wxRIGHT, 5);
 		$navbar->{paths}->{ $button->GetId() } = $crumbs[$_]->{path};
-		EVT_BUTTON($navbar, $button, sub { Wrangler::debug("Navbar: path-button: ". $_[1]->GetId .': '. $navbar->{paths}->{ $_[1]->GetId }); Wrangler::PubSub::publish('dir.activated', $navbar->{paths}->{ $_[1]->GetId }); });
+		EVT_BUTTON($navbar, $button, sub {
+			Wrangler::debug("Navbar: path-button: ". $_[1]->GetId .': '. $navbar->{paths}->{ $_[1]->GetId });
+			Wrangler::PubSub::publish('dir.activated', $navbar->{paths}->{ $_[1]->GetId });
+		});
 	}
 
 	$navbar->{sizer}->Layout();

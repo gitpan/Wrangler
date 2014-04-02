@@ -18,8 +18,11 @@ sub new {
 		# menu File
 		my $menu_file = Wx::Menu->new();
 		$menu_file->Append( my $settings = Wx::NewId, "&Settings", 'Configure Wrangler' );
+		$menu_file->AppendSeparator();
+		$menu_file->Append(	my $exit = Wx::NewId, "E&xit",	"Quit Wrangler");
 
 		EVT_MENU( $parent, $settings, sub { Wrangler::PubSub::publish('show.settings', 0); } );
+		EVT_MENU( $parent, $exit, sub { $parent->Close(); });
 
 
 		# menu Help
@@ -71,6 +74,11 @@ sub new {
 		EVT_MENU( $parent, $menu->Append(-1, "Zoom in  (CTRL++)", 'Zoom in'),		 sub { Wrangler::PubSub::publish('zoom.in'); } );
 		EVT_MENU( $parent, $menu->Append(-1, "Zoom standard  (CTRL+0)", 'Zoom standard'),	 sub { Wrangler::PubSub::publish('zoom.standard'); } );
 		EVT_MENU( $parent, $menu->Append(-1, "Zoom out  (CTRL+-)", 'Zoom out'),		 sub { Wrangler::PubSub::publish('zoom.out'); } );
+		$menu->AppendSeparator();
+		EVT_MENU( $parent, $menu->Append(-1, "Export listing as text", ''),		 sub {
+			require Wrangler::Wx::Dialog::ListingToText;
+			Wrangler::Wx::Dialog::ListingToText->new($parent);
+		});
 		$menu->AppendSeparator();
 		EVT_MENU( $parent, $menu->Append(-1, "Settings", 'Settings'),		 sub { Wrangler::PubSub::publish('show.settings', 1, 0); } );
 

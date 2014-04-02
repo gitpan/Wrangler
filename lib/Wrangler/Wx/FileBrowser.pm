@@ -34,9 +34,12 @@ sub new {
 	$self->sort_richlist($richlist);
 	$self->Populate($richlist);
 
+	# anything supplied via CLI?
+	my $start_dir = $Wrangler::Config::env{CLI_ChangeDirectory} ? $Wrangler::Config::env{CLI_ChangeDirectory} : $self->{wrangler}->{fs}->cwd();
+
 	# emit appropriate event
-	Wrangler::PubSub::publish('dir.activated', $self->{wrangler}->{fs}->cwd() );
-	$self->{wrangler}->{current_dir} = $self->{wrangler}->{fs}->cwd();	# a race-condition seems to be preventing global current_dir in Wrangler to be populated right after startup, so we need this hack; with multiple FileBrowser widget, last-wins
+	Wrangler::PubSub::publish('dir.activated', $start_dir );
+	$self->{wrangler}->{current_dir} = $start_dir;	# a race-condition seems to be preventing global current_dir in Wrangler to be populated right after startup, so we need this hack; with multiple FileBrowser widget, last-wins
 
 #	$self->SetFocus();
 
@@ -681,7 +684,7 @@ sub Populate {
 	}
 
 	$filebrowser->Show( 1 );
-#	$filebrowser->SetFocus();
+	$filebrowser->SetFocus();
 }
 
 sub RePopulate {
@@ -985,7 +988,7 @@ sub Delete {
 	}
 
 	# create a progress dialog
-	my $pd = Wx::ProgressDialog->new("Deleting...", "Deleting...", $selCnt, $filebrowser, wxPD_AUTO_HIDE | wxPD_APP_MODAL | wxPD_REMAINING_TIME );
+	my $pd = Wx::ProgressDialog->new("Deleting...", "Deleting...", $selCnt, $filebrowser, wxPD_AUTO_HIDE | wxPD_APP_MODAL | wxPD_ELAPSED_TIME );
 
 	# remember above/below (whatever applies) (getNextItem + geometry: _ABOVE/_BELOW does not work )
 	my $prev_id = $selections[0] > 0 ? $selections[0] - 1 : undef;
@@ -1059,7 +1062,7 @@ sub Delete {
 	# select the "next" item after the delete(s)
 	$filebrowser->SetItemState( $prev_id, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 
-#	$filebrowser->SetFocus();
+	$filebrowser->SetFocus();
 }
 
 sub OnEndLabelEdit {
@@ -1232,8 +1235,18 @@ sub Paste {
 		return;
 	}
 
+	# create a progress dialog
+	my $pd = Wx::ProgressDialog->new("File operation in progress...", "File operation...", 1, $filebrowser, wxPD_AUTO_HIDE | wxPD_APP_MODAL | wxPD_REMAINING_TIME );
+
+	my @errors;
 	for( $fdo->GetFilenames() ){
-		my ($name,$path) = $filebrowser->{wrangler}->{fs}->fileparse($_);
+		# it's probably us doing something completely wrong with encodings, BUT: why is this needed? Unless we remove the utf8
+		# flag here, the concat with {current_dir} results in a wrongly encoded $newpath, which Perl::IO operations choke on;
+		# the easy explanation would be: Wx messes up our paths while they are in $fdo (or we are not handling it correctly)
+		my $filepath = decode_utf8($_);	# decode
+		Encode::_utf8_off($filepath);	# then remove the utf8-flag the hard way
+
+		my ($name,$path) = $filebrowser->{wrangler}->{fs}->fileparse($filepath);
 		my $newpath = $filebrowser->{wrangler}->{fs}->catfile($filebrowser->{current_dir}, $name);
 		if($filebrowser->{our_stash}->{cut}){
 			# figure out new name: append "_moved"
@@ -1245,23 +1258,30 @@ sub Paste {
 				}
 			}
 
-			Wrangler::debug(" paste: cut/rename/move: $_ => $newpath");
+			Wrangler::debug(" paste: cut/rename/move: $filepath => $newpath");
+			$pd->Pulse("Moving $filepath");
 
-			# Preserving xattr on rename/move is not user-settable, as we compensate for "moves across fs boundaries" here,
-			# by always using move() (which relies on File::Copy) instead of rename() (which may fail). And all that is mostly
-			# opaque to users. A user expects a dwim move/mv, and the system command usually *does* preserve xattr - so do we
-			my $richproperties = $filebrowser->{wrangler}->{fs}->richproperties($_, ['Extended Attributes']);
+			my $richproperties = $filebrowser->{wrangler}->{fs}->richproperties($filepath, ['Extended Attributes']);
 
-			my $ok = $filebrowser->{wrangler}->{fs}->move($_, $newpath);
-			Wrangler::debug("Error on paste: cut/rename/move: $! ") unless $ok;
-
-			if($richproperties){
-				Wrangler::debug(" preserving xattribs");
-				for my $key (keys %$richproperties ){
-					# Wrangler::debug(" - $key");
-					$filebrowser->{wrangler}->{fs}->set_property($newpath, $key, $richproperties->{$key}) if $key =~ /^Extended Attributes::/;
-				}
+			my $ok = $filebrowser->{wrangler}->{fs}->move($filepath, $newpath);
+			unless($ok){
+				Wrangler::debug("Error on paste: cut/rename/move: $! ");
+				push(@errors, "Error on cut:$filepath -> paste:$newpath: $!");
+				next;
 			}
+
+			## since we use system 'mv' in move(), this is not needed anymore
+			# Preserving xattr on rename/move is not user-settable, as we compensate for "moves across fs boundaries" here,
+			# by always using move() instead of rename(). .. All that is mostly opaque to users. A user expects a dwim
+			# move/mv, and the system command usually *does* preserve xattr
+
+			# if($richproperties){
+			#	Wrangler::debug(" preserving xattribs");
+			#	for my $key (keys %$richproperties ){
+			#		# Wrangler::debug(" - $key");
+			#		$filebrowser->{wrangler}->{fs}->set_property($newpath, $key, $richproperties->{$key}) if $key =~ /^Extended Attributes::/;
+			#	}
+			# }
 		}else{
 			# figure out new name: append "_copy"
 			if( $filebrowser->{wrangler}->{fs}->test('e', $newpath) ){
@@ -1272,14 +1292,19 @@ sub Paste {
 				}
 			}
 
-			Wrangler::debug(" paste: copy/insert: $_ => $newpath");
+			Wrangler::debug(" paste: copy/insert: $filepath => $newpath");
+			$pd->Pulse("Copying $filepath");
 
-			my $ok = $filebrowser->{wrangler}->{fs}->copy($_, $newpath);
-			Wrangler::debug("Error on paste: copy/insert: $! ") unless $ok;
+			my $ok = $filebrowser->{wrangler}->{fs}->copy($filepath, $newpath);
+			unless($ok){
+				Wrangler::debug("Error on paste: cut/rename/move: $! ");
+				push(@errors, "Error on copy:$filepath -> paste:$newpath: $!");
+				next;
+			}
 
 			if($filebrowser->{wrangler}->config()->{'ui.filebrowser.copy.preserve_xattribs'}){
 				Wrangler::debug(" preserving xattribs");
-				my $richproperties = $filebrowser->{wrangler}->{fs}->richproperties($_, ['Extended Attributes']);
+				my $richproperties = $filebrowser->{wrangler}->{fs}->richproperties($filepath, ['Extended Attributes']);
 				for my $key (keys %$richproperties ){
 					# Wrangler::debug(" - $key");
 					$filebrowser->{wrangler}->{fs}->set_property($newpath, $key, $richproperties->{$key}) if $key =~ /^Extended Attributes::/;
@@ -1287,9 +1312,17 @@ sub Paste {
 			}
 		}
 	}
-	delete($filebrowser->{our_stash}->{cut});
 
-	$filebrowser->RePopulate();
+	$pd->Destroy();
+
+	if(@errors){
+		my $dialog = Wx::MessageDialog->new($filebrowser, "Failed to paste ".scalar(@errors) ." item(s):\n".join("\n",@errors), "Paste error", wxOK );
+		$dialog->ShowModal();
+	}else{
+		delete($filebrowser->{our_stash}->{cut});
+
+		$filebrowser->RePopulate();
+	}
 }
 
 sub PasteSymlinks {
@@ -1309,7 +1342,13 @@ sub PasteSymlinks {
 	}
 
 	for( $fdo->GetFilenames() ){
-		my ($name,$path) = $filebrowser->{wrangler}->{fs}->fileparse($_);
+		# it's probably us doing something completely wrong with encodings, BUT: why is this needed? Unless we remove the utf8
+		# flag here, the concat with {current_dir} results in a wrongly encoded $newpath, which Perl::IO operations choke on;
+		# the easy explanation would be: Wx messes up our paths while they are in $fdo (or we are not handling it correctly)
+		my $filepath = decode_utf8($_);	# decode
+		Encode::_utf8_off($filepath);	# then remove the utf8-flag the hard way
+
+		my ($name,$path) = $filebrowser->{wrangler}->{fs}->fileparse($filepath);
 		my $newpath = $filebrowser->{wrangler}->{fs}->catfile($filebrowser->{current_dir}, $name);
 
 		# figure out new name: append "_copy"
@@ -1321,9 +1360,9 @@ sub PasteSymlinks {
 			}
 		}
 
-		Wrangler::debug(" paste as symlinks: $_ -> $newpath");
+		Wrangler::debug(" paste as symlink: $filepath -> $newpath");
 
-		my $ok = $filebrowser->{wrangler}->{fs}->symlink($_, $newpath);
+		my $ok = $filebrowser->{wrangler}->{fs}->symlink($filepath, $newpath);
 		Wrangler::debug("Error on paste as symlinks: $! ") unless $ok;
 	}
 	delete($filebrowser->{our_stash}->{cut}) if $filebrowser->{our_stash}->{cut};
@@ -1461,6 +1500,11 @@ sub OnRightClick {
 		EVT_MENU( $filebrowser, $menu->Append(-1, "Zoom in\tCTRL++", 'Zoom in'),		 sub { Wrangler::PubSub::publish('zoom.in'); } );
 		EVT_MENU( $filebrowser, $menu->Append(-1, "Zoom standard\tCTRL+0", 'Zoom standard'),	 sub { Wrangler::PubSub::publish('zoom.standard'); } );
 		EVT_MENU( $filebrowser, $menu->Append(-1, "Zoom out\tCTRL+-", 'Zoom out'),		 sub { Wrangler::PubSub::publish('zoom.out'); } );
+		$menu->AppendSeparator();
+		EVT_MENU( $filebrowser, $menu->Append(-1, "Export listing as text", ''),		 sub {
+			require Wrangler::Wx::Dialog::ListingToText;
+			Wrangler::Wx::Dialog::ListingToText->new($filebrowser);
+		});
 		$menu->AppendSeparator();
 		EVT_MENU( $filebrowser, $menu->Append(-1, "Settings", 'Settings'),		 sub { Wrangler::PubSub::publish('show.settings', 1, 0); } );
 	}

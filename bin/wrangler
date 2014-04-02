@@ -4,6 +4,6 @@ use strict;
 use warnings;
 use Wrangler;
 
-Wrangler->new(@ARGV)->run();
+Wrangler->new()->run();
 
 exit 0;

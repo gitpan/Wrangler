@@ -9,7 +9,7 @@ use Wrangler::PluginManager;
 use Wrangler::FileSystem::Layers;
 use Wrangler::Wx::App;
 
-our $VERSION = '2.11.2';
+our $VERSION = 2.12;
 our $log = 0;
 our $wishlist;
 
@@ -21,13 +21,20 @@ sub new {
 		@_
 	}, $class;
 
-	if('--debug' ~~ @_){
-		$self->{debug} = 1;
-		$log = 1; # $log is non-OO for efficiency
-	}
-
 	## load config
 	Wrangler::Config::read();
+
+	## simple CLI switch parsing
+	if(@ARGV){
+		for(@ARGV){
+			if($_ eq '--debug'){
+				$self->{debug} = 1;
+				$log = 1; # $log is non-OO for efficiency
+			}elsif($_ =~ /^\/|^\\/){
+				$Wrangler::Config::env{CLI_ChangeDirectory} = $_;
+			}
+		}
+	}
 
 	## establish PluginManager
 	Wrangler::PluginManager::load_plugins($self);

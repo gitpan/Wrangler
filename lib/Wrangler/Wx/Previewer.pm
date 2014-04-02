@@ -422,14 +422,33 @@ sub Load {
 }
 
 sub LoadDefault {
-	my($self,$ref_or_path) = @_;
+	my $self = shift;
 
-	Wrangler::debug("Previewer::LoadDefault: @_");
+	# Wrangler::debug("Previewer::LoadDefault: @_");
 
-	## load 'no_preview' image, then init BmpScaled
+	## generate a 'no_preview' bitmap, then init BmpScaled
 	unless($self->{no_thumb}){
-		Wrangler::debug("Previewer::LoadDefault: load and cache no_thumb: $Wrangler::Images::image{'no_thumb'}");
-		$self->{no_thumb} = Wx::Bitmap->newFromXPM($Wrangler::Images::image{'no_thumb'})->ConvertToImage;
+		Wrangler::debug("Previewer::LoadDefault: generate and cache no_thumb");
+		my $dc = Wx::MemoryDC->new();
+		$self->{no_thumb} = Wx::Bitmap->new(400, 300, -1);
+		$dc->SelectObject($self->{no_thumb});
+		$dc->GradientFillLinear(
+			Wx::Rect->new(0,30,399,160),
+			Wx::Colour->new(0,0,0),
+			Wx::Colour->new(100,100,100),
+			wxSOUTH
+		);
+		$dc->GradientFillLinear(
+			Wx::Rect->new(0,190,399,80),
+			Wx::Colour->new(100,100,100),
+			Wx::Colour->new(0,0,0),
+			wxSOUTH
+		);
+		$dc->SetTextForeground( Wx::Colour->new(220,220,220) );
+		$dc->SetFont( Wx::Font->new( 13, wxFONTFAMILY_SWISS , wxNORMAL, wxNORMAL ) );
+		my ($text_width) = $dc->GetTextExtent('no preview');
+		$dc->DrawText('no preview', int((400 / 2) - ($text_width / 2)), 200 );
+		$self->{no_thumb} = $self->{no_thumb}->ConvertToImage;
 	}
 	$self->{ImgCurrent} = $self->{no_thumb};
 	$self->{BmpScaled} = Wx::Bitmap->new( $self->{no_thumb} );

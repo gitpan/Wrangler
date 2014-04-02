@@ -40,5 +40,5 @@ requires:
   XML::Simple: 0
   perl: 5.01
 resources:
-  repository: git://github.com/clipland/wrangler.git
-version: v2.11.2
+  repository: https://github.com/clipland/wrangler
+version: 2.12

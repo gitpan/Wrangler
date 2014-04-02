@@ -10,7 +10,6 @@ use warnings;
 
 use Carp;
 use Cwd ();
-use File::Copy ();
 use File::ExtAttr ();
 use File::Path ();
 use File::Basename ();
@@ -377,6 +376,7 @@ sub lstat {
 sub symlink {
 	my ($self, $old, $new) = @_;
 	# $dir = $self->_path_from_root($dir);
+	# print STDOUT " Linux::symlink(@_) \n";
 
 	return CORE::symlink($old, $new);
 }
@@ -442,15 +442,17 @@ sub trash {
 
 sub rename {
 	my ($self, $path, $new) = @_;
-	 print "rename(@_)\n";
+	# print "rename(@_)\n";
 	## todo: check if this is a 'rename' or a 'move' across filesystem boundaries
 	return CORE::rename($path,$new);
 }
 
 sub move {
-	my ($self, $path, $new) = @_;
+	my $self = shift;
 	# print "move(@_)\n";
-	return File::Copy::move($path,$new);
+	return 0 if !-e $_[0];
+	my $result = system('mv',@_);	# return 0 on success, -1 or similar on error
+	return $result == 0 ? 1 : 0;	# move returns 1 on success
 }
 
 sub copy {
