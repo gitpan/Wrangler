@@ -301,7 +301,7 @@ for('text.txt','video.mp4','image.jpg'){
 			'Filesystem::Hidden' => 0,
 			'Filesystem::Type' => 'File',
 			'Filesystem::rdef' => 0,
-			'Filesystem::dev' => 2065,
+			'Filesystem::dev' => re('\d+'),
 			'Filesystem::Blocks' => 8,
 			'Filesystem::Size' => 7,
 			'Filesystem::Modified' => re('\d{10}'),

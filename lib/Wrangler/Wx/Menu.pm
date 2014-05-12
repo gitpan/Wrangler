@@ -24,6 +24,11 @@ sub new {
 		EVT_MENU( $parent, $settings, sub { Wrangler::PubSub::publish('show.settings', 0); } );
 		EVT_MENU( $parent, $exit, sub { $parent->Close(); });
 
+		# menu Tools
+		my $menu_tools = Wx::Menu->new();
+		$menu_tools->Append( my $keywording = Wx::NewId, "&Keywording Tool", 'Keywording Tool' );
+
+		EVT_MENU( $parent, $keywording, sub { require Wrangler::Wx::Dialog::KeywordingTool; Wrangler::Wx::Dialog::KeywordingTool->new($parent) } );
 
 		# menu Help
 		my $menu_help = Wx::Menu->new();
@@ -85,6 +90,7 @@ sub new {
 
 	$self->Append( $menu_file, '&File' );
 	$self->Append( $menu, '&FileBrowser' );
+	$self->Append( $menu_tools, '&Tools' );
 	$self->Append( $menu_help, '&Help' ); # Wrangler::Wx::Menu::Help->new($parent)
 
 	return $self;

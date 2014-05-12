@@ -8,6 +8,15 @@ use warnings;
 
 our $text = "Revision history for Wrangler
 
+2.13	2014-05-12
+	- currently unused dependencies XML::Simple and
+	  Crypt::SSLeay dropped from Makefile.PL
+	- RePopulate triggered by dir change monitoring now less
+	  annoying after renames and deletes
+	- new Dialog KeywordingTool
+	- FileBrowser: ListCtrl instead of ListView
+	- changed deb package build system
+
 2.12	2014-04-02
 	- FileBrowser: Paste operations now handle utf8
 	  paths, and give UI feedback on error

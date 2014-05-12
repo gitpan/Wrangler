@@ -1,5 +1,5 @@
 {
-   "abstract" : "A file manager with sophisticated metadata handling capabilities",
+   "abstract" : "File manager with sophisticated metadata handling capabilities",
    "author" : [
       "Clipland (clipland@cpan.org)"
    ],
@@ -34,7 +34,6 @@
       "runtime" : {
          "requires" : {
             "Alien::wxWidgets" : "0",
-            "Crypt::SSLeay" : "0",
             "Cwd" : "0",
             "Data::Dumper" : "0",
             "Digest::MD5" : "0",
@@ -51,7 +50,6 @@
             "Wx" : "0",
             "Wx::Perl::Packager" : "0",
             "Wx::TreeListCtrl" : "0",
-            "XML::Simple" : "0",
             "perl" : "5.01"
          }
       }
@@ -62,5 +60,5 @@
          "url" : "https://github.com/clipland/wrangler"
       }
    },
-   "version" : "2.12"
+   "version" : "2.13"
 }

@@ -17,7 +17,7 @@ WriteMakefile(
 		'Alien::wxWidgets'	=> 0,		# The Perl 5 License (Artistic 1 & GPL 1)
 							#  -> wxWidgets: wxWidgets is currently licenced under the "wxWindows Library Licence" pending approval of the "wxWidgets Library Licence" which will be identical apart from the name. "but basically you can distribute proprietary binaries without distributing any source code, and neither will wxWidgets conflict with GPL code you may be using or developing with it."
 # unused in 2.x	'Browser::Open'		=> 0,		# The Perl 5 License (Artistic 1 & GPL 1)
-		'Crypt::SSLeay'		=> 0,		# The Artistic License 2.0 (GPL Compatible)
+# unused in 2.x	'Crypt::SSLeay'		=> 0,		# The Artistic License 2.0 (GPL Compatible)
 							#  -> openssl: "The OpenSSL toolkit is licensed under an Apache-style licence which basically means that you are free to get and use it for commercial and non-commercial purposes."
 		'Cwd'			=> 0,		# PathTools "This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself."
 		'Data::Dumper'		=> 0,		# "This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself."
@@ -43,7 +43,7 @@ WriteMakefile(
 		'Wx::Perl::Packager'	=> 0,		# in README: This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 		'Wx::TreeListCtrl'	=> 0,		# in README: This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself
 # unused in 2.x	'XML::ASX'		=> 0,		# only copyright, no licensing
-		'XML::Simple'		=> 0,		# The Perl 5 License (Artistic 1 & GPL 1)
+# unused in 2.x	'XML::Simple'		=> 0,		# The Perl 5 License (Artistic 1 & GPL 1)
 
 		# Wrangler uses some icons of the Tango Icon Library which is public domain as of
 		# release 0.8.90 http://tango.freedesktop.org
@@ -132,7 +132,7 @@ sub may_send_version_information {
 
 	my %values = (
 			'dist'    => 'Wrangler',
-			'version' => '2.12',
+			'version' => '2.13',
 			'osname'  => $Config::Config{osname},
 			'archname'=> $Config::Config{archname},
 			'osver'   => $^O,

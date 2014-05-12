@@ -6,7 +6,7 @@ use warnings;
 use Wx qw(:everything);
 use Wx::Event qw(:everything);
 use Wx::DND; # offers wxTheClipboard
-use base qw(Wx::ListView);
+use base qw(Wx::ListCtrl);
 use HTTP::Date ();
 use Encode;
 
@@ -221,6 +221,8 @@ sub new {
 	$self->{timer} = Wx::Timer->new();
 	EVT_TIMER($self->{timer}, $self->{timer}, sub {
 		my $richprop_dir = $self->{wrangler}->{fs}->richproperties($self->{current_dir}, ['Filesystem::Modified']);
+
+		return if $self->{our_stash}->{rename}; # don't disturb ongoing renames
 
 		if($richprop_dir->{'Filesystem::Modified'} != $self->{current_dir_mtime}){
 			Wrangler::debug("Wrangler::Wx::FileBrowser: Timer pull_monitor: $self->{current_dir} $self->{current_dir_mtime} changed");
@@ -714,8 +716,9 @@ sub RePopulate {
 			$filebrowser->SetItemState( $_, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 		}
 	}
+
 	## recreate ScrollPos (does not work, at least on nix + Wx 2.8.12, native-ctrl -> feature http://trac.wxwidgets.org/ticket/10267)
-	$filebrowser->SetScrollPos(wxVERTICAL, $scroll_pos_vertical, 'redraw');
+	$filebrowser->SetScrollPos(wxVERTICAL, $scroll_pos_vertical);
 	$filebrowser->SetScrollPos(wxHORIZONTAL, $scroll_pos_horizontal, 'redraw');
 }
 
@@ -1062,6 +1065,12 @@ sub Delete {
 	# select the "next" item after the delete(s)
 	$filebrowser->SetItemState( $prev_id, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 
+	# let's cheat here: we modified the listing, removed element(s), and the
+	# listing should reflect the current state, so don't annoy the user with
+	# another repopulate; todo: remove this once we change monitoring, or when
+	# RePopulate() becomes clever enough to update only dirty items
+	$filebrowser->{current_dir_mtime} = time();
+
 	$filebrowser->SetFocus();
 }
 
@@ -1159,6 +1168,12 @@ sub OnEndLabelEdit {
 		}
 
 		Wrangler::debug("FileBrowser::OnEndLabelEdit: rename($oldpath, $newpath): $ok $!");
+
+		# let's cheat here: we modified the listing, removed element(s), and the
+		# listing should reflect the current state, so don't annoy the user with
+		# another repopulate; todo: remove this once we change monitoring, or when
+		# RePopulate() becomes clever enough to update only dirty items
+		$filebrowser->{current_dir_mtime} = time();
 	}
 }
 

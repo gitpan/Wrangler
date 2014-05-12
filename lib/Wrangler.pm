@@ -9,7 +9,7 @@ use Wrangler::PluginManager;
 use Wrangler::FileSystem::Layers;
 use Wrangler::Wx::App;
 
-our $VERSION = 2.12;
+our $VERSION = 2.13;
 our $log = 0;
 our $wishlist;
 
@@ -135,7 +135,7 @@ __END__
 
 =head1 NAME
 
-Wrangler - A file manager with sophisticated metadata handling capabilities
+Wrangler - File manager with sophisticated metadata handling capabilities
 
 =head1 DESCRIPTION
 

@@ -56,7 +56,7 @@ sub file_context_menu {
 	}
 
 	for my $colourId (1..$#osx_colours){
-		my $menuItem = Wx::MenuItem->new($menu, -1, 'Label "'.$osx_colours[$colourId].'"', 'Label "'.$osx_colours[$colourId].'"', wxITEM_RADIO);
+		my $menuItem = Wx::MenuItem->new($menu, -1, 'Label "'.$osx_colours[$colourId].'"', 'Label "'.$osx_colours[$colourId].'"', wxITEM_RADIO); # ."\t$colourId"
 
 		push(@{ $self->{menu_entries} }, [
 			$menuItem,

@@ -18,6 +18,7 @@ lib/Wrangler/FileSystem/Linux.pm
 lib/Wrangler/Plugin/ColourLabels.pm
 lib/Wrangler/Wx/App.pm
 lib/Wrangler/Wx/Dialog/About.pm
+lib/Wrangler/Wx/Dialog/KeywordingTool.pm
 lib/Wrangler/Wx/Dialog/ListingToText.pm
 lib/Wrangler/Wx/Dialog/MultiRename.pm
 lib/Wrangler/Wx/Dialog/Properties.pm
