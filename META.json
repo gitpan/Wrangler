@@ -4,7 +4,7 @@
       "Clipland (clipland@cpan.org)"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.84, CPAN::Meta::Converter version 2.132830",
+   "generated_by" : "ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.141170",
    "license" : [
       "restricted"
    ],
@@ -23,6 +23,7 @@
       "build" : {
          "requires" : {
             "File::Temp" : "0",
+            "Test::Deep" : "0",
             "Test::Simple" : "0.44"
          }
       },
@@ -37,15 +38,16 @@
             "Cwd" : "0",
             "Data::Dumper" : "0",
             "Digest::MD5" : "0",
+            "Encode" : "0",
             "File::ExtAttr" : "0",
             "File::HomeDir" : "0",
-            "File::Slurp" : "0",
             "File::Spec" : "0",
             "IO::Scalar" : "0",
             "Image::ExifTool" : "0",
             "Image::MetaData::JPEG" : "0",
             "JSON::XS" : "0",
             "MIME::Types" : "0",
+            "Path::Tiny" : "0.054",
             "Sys::Filesystem" : "0",
             "Wx" : "0",
             "Wx::Perl::Packager" : "0",
@@ -60,5 +62,5 @@
          "url" : "https://github.com/clipland/wrangler"
       }
    },
-   "version" : "2.13"
+   "version" : "2.14"
 }

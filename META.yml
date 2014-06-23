@@ -3,40 +3,42 @@ abstract: 'File manager with sophisticated metadata handling capabilities'
 author:
   - 'Clipland (clipland@cpan.org)'
 build_requires:
-  File::Temp: 0
-  Test::Simple: 0.44
+  File::Temp: '0'
+  Test::Deep: '0'
+  Test::Simple: '0.44'
 configure_requires:
-  ExtUtils::MakeMaker: 0
+  ExtUtils::MakeMaker: '0'
 dynamic_config: 1
-generated_by: 'ExtUtils::MakeMaker version 6.84, CPAN::Meta::Converter version 2.132830'
+generated_by: 'ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.141170'
 license: restrictive
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+  version: '1.4'
 name: Wrangler
 no_index:
   directory:
     - t
     - inc
 requires:
-  Alien::wxWidgets: 0
-  Cwd: 0
-  Data::Dumper: 0
-  Digest::MD5: 0
-  File::ExtAttr: 0
-  File::HomeDir: 0
-  File::Slurp: 0
-  File::Spec: 0
-  IO::Scalar: 0
-  Image::ExifTool: 0
-  Image::MetaData::JPEG: 0
-  JSON::XS: 0
-  MIME::Types: 0
-  Sys::Filesystem: 0
-  Wx: 0
-  Wx::Perl::Packager: 0
-  Wx::TreeListCtrl: 0
-  perl: 5.01
+  Alien::wxWidgets: '0'
+  Cwd: '0'
+  Data::Dumper: '0'
+  Digest::MD5: '0'
+  Encode: '0'
+  File::ExtAttr: '0'
+  File::HomeDir: '0'
+  File::Spec: '0'
+  IO::Scalar: '0'
+  Image::ExifTool: '0'
+  Image::MetaData::JPEG: '0'
+  JSON::XS: '0'
+  MIME::Types: '0'
+  Path::Tiny: '0.054'
+  Sys::Filesystem: '0'
+  Wx: '0'
+  Wx::Perl::Packager: '0'
+  Wx::TreeListCtrl: '0'
+  perl: '5.01'
 resources:
   repository: https://github.com/clipland/wrangler
-version: 2.13
+version: '2.14'
